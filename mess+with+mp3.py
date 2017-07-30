@@ -33,9 +33,9 @@ folder_to_use = input("please select root folder: ")
 #album_name = folder_name 
 
 #all of the above as a one-liner:
-album_name2 = str(os.getcwd()).split("\\")[-1]
+#album_name2 = str(os.getcwd()).split("\\")[-1]
 
-print(album_name)
+#print(album_name)
 #print(album_name2)
 
 print(valid_keys_str)
@@ -56,7 +56,7 @@ for root, subdirs, files in os.walk(folder_to_use):
     title_counter = 1
     for file in files:
         if file.endswith(".mp3"):
-            change_mp3_file(root, file, "", "")
+            change_mp3_file(root, file, "album", "CD by Konstantinos")
         title_counter += 1
 print("Finished!")
 
