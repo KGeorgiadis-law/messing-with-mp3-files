@@ -6,22 +6,39 @@
 #!pip install mutagen
 
 
-# In[2]:
+# In[3]:
 
 # dependencies
 import os
 
 
-# In[3]:
+# In[27]:
 
 # for help on mutagen, see https://mutagen.readthedocs.io/en/latest/user/id3.html
 from mutagen.easyid3 import EasyID3
-print(EasyID3.valid_keys.keys())
+valid_keys = EasyID3.valid_keys.keys()
+print(valid_keys)   
 
 
-# In[ ]:
+# In[36]:
 
-folder_to_use = input("please select folder:")
+# functions to use
+def change_mp3_file(mp3_file_folder, mp3_file_name, key_to_change, new_value):
+    # join the folder name and the file name to find the absolute path
+    mp3_file_path = os.path.join(mp3_file_folder, mp3_file_name)
+    # initialise mutagen
+    current_track = EasyID3(mp3_file_path)
+    if key_to_change in valid_keys:
+        current_track[key_to_change] = new_value
+        print("changing {} for '{}' to '{}'".format(key_to_change, mp3_file_name, new_value))
+        current_track.save()
+    else:
+        raise NameError("You doofus! '{}' is not one of the available keys! You can see the available keys by using print(available_keys)".format(key_to_change))
+
+
+# In[34]:
+
+folder_to_use = input("please select root folder: ")
 
 
 # In[ ]:
@@ -40,32 +57,19 @@ print(album_name)
 #print(album_name2)
 
 
-# In[ ]:
+# In[40]:
 
-# list to save all mp3 files in folder
-tracks = list()
-
-# get all mp3 tracks in file and add them to the 'tracks' list
-for file in os.listdir():
-    if file.endswith(".mp3"):
-        tracks.append(file)
-
-#print(tracks)
-
-
-# In[ ]:
-
-# change the album to the folder name
-for track in tracks:
-    current_track = EasyID3(track)
-    current_track["album"] = album_name
-    print("changing album for ", track)
-    current_track.save()
-
+mp3_files = list()
+for root, subdirs, files in os.walk(folder_to_use):
+    print("--\nroot = "+root)
+    print(subdirs)
+    print(files)
+    for file in files:
+        if file.endswith(".mp3"):
+            try:
+                change_mp3_file(root, file, "kjasdlkalfd", "")
+            except NameError:
+                print("*** Invalid value to change, script will now exit ***")
+                break
 print("Finished!")
-
-
-# In[ ]:
-
-
 
