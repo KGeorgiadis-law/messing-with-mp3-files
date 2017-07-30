@@ -42,11 +42,11 @@ print(valid_keys_str)
 
 title_file = ""
 
-with open(os.path.join(folder_to_use, title_file), "r") as titles:
-    contents = titles.read()
-    titles_list = contents.split("\n")
-    for i in range(len(titles_list)):
-        print(i, ": ", titles_list[i])
+##with open(os.path.join(folder_to_use, title_file), "r") as titles:
+##    contents = titles.read()
+##    titles_list = contents.split("\n")
+##    for i in range(len(titles_list)):
+##        print(i, ": ", titles_list[i])
 
 mp3_files = list()
 for root, subdirs, files in os.walk(folder_to_use):
@@ -56,7 +56,8 @@ for root, subdirs, files in os.walk(folder_to_use):
     title_counter = 1
     for file in files:
         if file.endswith(".mp3"):
-            change_mp3_file(root, file, "album", "CD by Konstantinos")
+            change_mp3_file(root, file, "album", "Metwpiki")
+            change_mp3_file(root, file, "albumartist", "Vasilis Papakonstantinou")
         title_counter += 1
 print("Finished!")
 
