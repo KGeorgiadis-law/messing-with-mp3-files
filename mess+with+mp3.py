@@ -41,6 +41,7 @@ def get_mp3_information(mp3_file_folder, mp3_file_name, key_to_take):
 def mass_renamer(root, original_file, new_name):
     original_file_path = os.path.join(root, original_file)
     new_file_path = os.path.join(root, new_name)
+    print("Renaming '{}' to '{}'...".format(original_file, new_name))
     os.rename(original_file_path, new_file_path)
     print("finished!")
 
@@ -92,21 +93,21 @@ folder_to_use = input("please select root folder: ")
 #         #print(i, ": ", titles_list[i])
 
 
-# main action
-# mp3_files = list()
-# for root, subdirs, files in os.walk(folder_to_use):
-#     print("--\nroot = "+root)
-#     print(subdirs)
-#     print(files)
-#     title_counter = 0
-#     for file in files:
-#         if file.endswith(".mp3"):
-#             title = all_properties[title_counter][0]
-#             artist = all_properties[title_counter][1]
-#             change_mp3_file(root, file, "title", title)
-#             change_mp3_file(root, file, "artist", artist)
-#         title_counter += 1
-# print("Finished!")
+# main action - changing mp3 files' metadata
+mp3_files = list()
+for root, subdirs, files in os.walk(folder_to_use):
+ print("--\nroot = "+root)
+ print(subdirs)
+ print(files)
+ title_counter = 0
+ for file in files:
+     if file.endswith(".mp3"):
+##         title = all_properties[title_counter][0]
+##         artist = all_properties[title_counter][1]
+##         change_mp3_file(root, file, "album", "To Paixnidi Paizetai")
+         change_mp3_file(root, file, "album", "SFENTONA Live")
+     title_counter += 1
+print("Finished!")
 
 
 
@@ -122,25 +123,25 @@ folder_to_use = input("please select root folder: ")
 
 # renaming files based on the title name
 
-# mp3_files = list()
-# counter = 1
-# for file in os.listdir(folder_to_use):
-#     if file.endswith(".mp3"):
-#         title = get_mp3_information(folder_to_use, file, "title")
-#         mass_renamer(folder_to_use, file, "%02d - %s.mp3" % (counter, title[0]))
-#         counter += 1
+### mp3_files = list()
+##counter = 1
+##for file in os.listdir(folder_to_use):
+##    if file.endswith(".mp3"):
+##        title = get_mp3_information(folder_to_use, file, "title")
+##        mass_renamer(folder_to_use, file, "%02d - %s.mp3" % (counter, title[0]))
+##        counter += 1
 
 # the opposite : setting the titles in accordance with the file name
 
-for file in os.listdir(folder_to_use):
-    if file.endswith(".mp3"):
-        title = file[3:-4]  
-        print(title)
-        # convert to Greeklish (for encoding issues)
-#         title = Grecka.toGreeklish(title)
-#         print(title)
-        change_mp3_file(folder_to_use, file, "title", title)
-        change_mp3_file(folder_to_use, file, "artist", ARTIST_NAME)
-        change_mp3_file(folder_to_use, file, "album", ALBUM_NAME)
-print("finished!")
+##for file in os.listdir(folder_to_use):
+##    if file.endswith(".mp3"):
+##        title = file[3:-4]  
+##        print(title)
+##        # convert to Greeklish (for encoding issues)
+###         title = Grecka.toGreeklish(title)
+###         print(title)
+##        change_mp3_file(folder_to_use, file, "title", title)
+##        change_mp3_file(folder_to_use, file, "artist", ARTIST_NAME)
+##        change_mp3_file(folder_to_use, file, "album", ALBUM_NAME)
+##print("finished!")
 
