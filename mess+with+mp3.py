@@ -6,15 +6,14 @@
 
 # dependencies
 import os
-
+import csv
 # with thanks to ThemisB https://github.com/ThemisB/grecka
 from grecka import *
 
-
-
-
 # for help on mutagen, see https://mutagen.readthedocs.io/en/latest/user/id3.html
 from mutagen.easyid3 import EasyID3
+
+# get valid keys from mutagen
 valid_keys = list(EasyID3.valid_keys.keys())
 valid_keys.sort()
 valid_keys_str = ", ".join(valid_keys)
@@ -35,8 +34,15 @@ def change_mp3_file(mp3_file_folder, mp3_file_name, key_to_change, new_value):
 
 def get_mp3_information(mp3_file_folder, mp3_file_name, key_to_take):
     mp3_file_path = os.path.join(mp3_file_folder, mp3_file_name)
-    current_track = EasyID3(mp3_file_path)
-    return current_track[key_to_take]
+    try:
+        current_track = EasyID3(mp3_file_path)
+    except:
+        return ""
+    info_to_retrieve = current_track.get(key_to_take, "")
+    if info_to_retrieve != "":
+        return info_to_retrieve[0]
+    else:
+        return ""
 
 def mass_renamer(root, original_file, new_name):
     original_file_path = os.path.join(root, original_file)
@@ -94,22 +100,50 @@ folder_to_use = input("please select root folder: ")
 
 
 # main action - changing mp3 files' metadata
-mp3_files = list()
-for root, subdirs, files in os.walk(folder_to_use):
- print("--\nroot = "+root)
- print(subdirs)
- print(files)
- title_counter = 0
- for file in files:
-     if file.endswith(".mp3"):
-##         title = all_properties[title_counter][0]
-##         artist = all_properties[title_counter][1]
+##mp3_files = list()
+
+##for root, subdirs, files in os.walk(folder_to_use):
+## print("--\nroot = "+root)
+## print(subdirs)
+## print(files)
+#### title_counter = 0
+## for file in files:
+##     if file.endswith(".mp3"):
+####         title = all_properties[title_counter][0]
+####         artist = all_properties[title_counter][1]
 ##         change_mp3_file(root, file, "album", "To Paixnidi Paizetai")
-         change_mp3_file(root, file, "album", "SFENTONA Live")
-     title_counter += 1
-print("Finished!")
+##         change_mp3_file(root, file, "album", "SFENTONA Live")
+##     title_counter += 1
+##print("Finished!")
 
 
+## what do I want to record?
+## File name, location, title, artist, album
+## alternative idea: record EVERYTHING
+
+with open('collection.csv', 'w', encoding='utf-8', newline='') as csvfile:
+    fieldnames = ['title', 'artist', 'album', 'filename', 'location']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    for root, subdirs, files in os.walk(folder_to_use):
+        print("--\nCurrent Folder = "+root)
+        print(subdirs)
+        print(files)
+        title_counter = 0
+        for file in files:
+            if file.endswith(".mp3"):
+                print("retrieving information...")
+                title = get_mp3_information(root, file, 'title')
+                artist = get_mp3_information(root, file, 'artist')
+                album = get_mp3_information(root, file, 'album')
+                print("writing to collection...")
+                writer.writerow(
+                    {'title':title,
+                     'artist':artist,
+                     'album':album,
+                     'filename': file,
+                     'location': root
+                    })
 
 
 # get the titles of all mp3 files in folder
